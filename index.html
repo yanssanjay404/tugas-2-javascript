@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Pegawai</title>
+    <style>
+        table {
+            width: 70%;
+            border-collapse: collapse;
+            margin: 20px auto;
+            font-family: Arial, sans-serif;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+    </style>
+</head>
+<body>
+    <h2 style="text-align: center;">Data Pegawai</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Nama Pegawai</th>
+                <th>Umur</th>
+                <th>Jabatan</th>
+                <th>Status</th>
+                <th>Gaji Pokok</th>
+                <th>Tunjangan Jabatan</th>
+                <th>BPJS</th>
+                <th>Tunjangan Keluarga</th>
+                <th>Total Gaji</th>
+            </tr>
+        </thead>
+        <tbody id="pegawaiTable"></tbody>
+        <tfoot>
+            <tr>
+                <td colspan="8" style="text-align: right; font-weight: bold;">Total Keseluruhan Gaji:</td>
+                <td id="totalKeseluruhan"></td>
+            </tr>
+        </tfoot>
+    </table>
+    <script>
+        let pegawaiList = [
+            { nama: "Dodi Prayodi", umur: 25, jabatan: "Manajer", status: "Menikah" },
+            { nama: "Ari Santoso", umur: 30, jabatan: "Asisten Manajer", status: "Belum Menikah" },
+            { nama: "Siti Rahma", umur: 28, jabatan: "Staff", status: "Menikah" },
+            { nama: "Budi Prasetyo", umur: 35, jabatan: "Manajer", status: "Menikah" },
+            { nama: "Dewi Lestari", umur: 27, jabatan: "Staff", status: "Belum Menikah" }
+        ];
+        function getGajiPokok(jabatan) {
+            if (jabatan === "Manajer") return 15000000;
+            else if (jabatan === "Asisten Manajer") return 10000000;
+            else if (jabatan === "Staff") return 5000000;
+            else return 0;
+        }
+        let tableBody = document.getElementById("pegawaiTable");
+        let totalKeseluruhanGaji = 0;
+        pegawaiList.forEach(pegawai => {
+            let gajiPokok = getGajiPokok(pegawai.jabatan);
+            let tunjanganJabatan = gajiPokok * 0.15; 
+            let bpjs = gajiPokok * 0.10; 
+            let tunjanganKeluarga = (pegawai.status === "Menikah") ? gajiPokok * 0.20 : 0
+            let totalGaji = gajiPokok + tunjanganJabatan + tunjanganKeluarga - bpjs; 
+            totalKeseluruhanGaji += totalGaji;
+            tableBody.innerHTML += `
+                <tr>
+                    <td>${pegawai.nama}</td>
+                    <td>${pegawai.umur}</td>
+                    <td>${pegawai.jabatan}</td>
+                    <td>${pegawai.status}</td>
+                    <td>Rp ${gajiPokok.toLocaleString()}</td>
+                    <td>Rp ${tunjanganJabatan.toLocaleString()}</td>
+                    <td>Rp ${bpjs.toLocaleString()}</td>
+                    <td>Rp ${tunjanganKeluarga.toLocaleString()}</td>
+                    <td>Rp ${totalGaji.toLocaleString()}</td>
+                </tr>
+            `;
+        });
+        document.getElementById("totalKeseluruhan").innerHTML = `Rp ${totalKeseluruhanGaji.toLocaleString()}`;
+    </script>
+</body>
+</html>
